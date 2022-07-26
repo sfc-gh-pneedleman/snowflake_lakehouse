@@ -9,4 +9,3 @@ Here are the high-level steps to get started:
           - in terminal with Python and Streamlit installed: `streamlit run 1_🏠Home.py`
 
 
-![Streamlit Snowflake App](https://youtu.be/Q2sW5scpoNo)
