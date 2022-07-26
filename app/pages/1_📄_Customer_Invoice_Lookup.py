@@ -97,7 +97,6 @@ def displayPDF(file):
     # Displaying File
     st.markdown(pdf_display, unsafe_allow_html=True)
 
- 
 
 
 #main 
