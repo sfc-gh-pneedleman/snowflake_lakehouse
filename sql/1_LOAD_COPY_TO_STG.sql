@@ -12,23 +12,21 @@ ENCRYPTION = (TYPE =  'SNOWFLAKE_SSE');
 -- Load data files into the newly created Snowflake stages 
 
 -- #####
--- ## upload customer data. Not this command should be run via SnoqSQL 
--- ## RUN the below command via SnowSQL to uplaod data to your Stage.
+-- ## Upload Customer data:
+-- ## Run the below command via SnowSQL to uplaod  data to your Stage.
 -- ## Relative path to execute this command is from ./files/
 -- ######
 put file://json/customer_data/* @json_data_stage/customer_data/;                                                 
-
+/* end put */
 
 -- ##### 
--- ## note this command to upload PDFs will take about 10min for me given that 1GB of data going through my upload speed 
--- ## RUN the below command via SnowSQL to uplaod data to your Stage 
+-- ## Upload PDF Invoices: 
+-- ## Note this command to upload PDFs will take about 10min for me given that 1GB based on my upload speed 
+-- ## Run the below command via SnowSQL to uplaod data to your Stage 
 -- ## Relative path to execute this command is from ./files/
 -- ##### 
 put file://pdfs/* @pdf_file_stage AUTO_COMPRESS=false;
+/* end put */
 
 --since this is a directory stage used to support unstructured data, we must refresh the directory structure 
 ALTER STAGE PDF_FILE_STAGE REFRESH;
-
---lets review our objects and take a quick look at the stages
-LIST @JSON_DATA_STAGE;
-LIST @PDF_FILE_STAGE;
