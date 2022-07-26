@@ -1,6 +1,6 @@
-#Snowflake Lakehouse Demo
+# Snowflake Lakehouse Demo
 
-###These files are based on the medium article post: URL 
+### These files are based on the medium article post: URL 
 
 Here are the high-level steps to get started:
   1. Downlaod the /files to local and use SnowSQL or another connector to put the files to Snowflake Stage: sql/1_LOAD_%
