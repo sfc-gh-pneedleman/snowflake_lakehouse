@@ -121,6 +121,7 @@ def model_data(df):
         alt.datum.Measure == 'Current Sales:Q'
     ).encode(
         alt.Y('Current Sales:Q',  scale=alt.Scale(domain=[750000, 3500000]), axis=alt.Axis(title='Total Sales by Day')),
+        alt.X('invoice_date:T',  axis=alt.Axis(title='Invoice Date')),
         tooltip= [alt.Tooltip("invoice_date:T", title="Invoice Date"), 
                     alt.Tooltip("Current Sales:Q", title="Current Sales by Day")]
     )
