@@ -130,7 +130,7 @@ def model_data(df):
     line_B = base.transform_filter(
         alt.datum.Measure == 'Forecast:Q'
     ).encode(
-        alt.Y('Forecast:Q', scale=alt.Scale(domain=[750000, 3500000]), axis=alt.Axis(title='Forcast')),
+        alt.Y('Forecast:Q', scale=alt.Scale(domain=[750000, 3500000]), axis=alt.Axis(title='Forecast')),
          tooltip= [alt.Tooltip("invoice_date:T", title="Invoice Date"),  
                    alt.Tooltip("Forecast:Q", title="Forecast")]
     )
