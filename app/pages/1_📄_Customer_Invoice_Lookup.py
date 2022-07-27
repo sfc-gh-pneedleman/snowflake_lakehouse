@@ -9,10 +9,16 @@ from datetime import datetime
 import base64
 import urllib.request
 import pandas as pd
+import string
+
+#from pandasgui import show
+#from pandasgui.datasets import titanic
+#gui = show(titanic)
 
 st.set_page_config(page_title="Customer Invoice Lookup", page_icon="📄") 
 
-st.header('Customer Invoice Lookup')
+
+st.header('Invoice Lookup')
 
 st.write(
 """
@@ -28,13 +34,13 @@ def get_data():
 
     ##snowflake connection info. Its not good practice to include passwords in your code. This is here for demo purposes
     ctx = snowflake.connector.connect(
-        user="<username>",
-        password='<password>', 
-        account="<account name>",
-        warehouse="COMPUTE_WH",
-        database="SNOW_DB",
-        schema="SNOW_SCHEMA",
-        role="<role>"
+        user=string.sf_user,
+        password=string.sf_password, 
+        account=string.sf_account,
+        warehouse=string.sf_warehouse,
+        database=string.sf_database,
+        schema=string.sf_schema,
+        role=string.sf_role
     )
 
     #open a snowflake cursor
@@ -97,6 +103,7 @@ def displayPDF(file):
     # Displaying File
     st.markdown(pdf_display, unsafe_allow_html=True)
 
+ 
 
 
 #main 

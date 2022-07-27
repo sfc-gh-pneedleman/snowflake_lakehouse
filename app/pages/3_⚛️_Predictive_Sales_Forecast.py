@@ -9,6 +9,7 @@ import streamlit as st
 import altair as alt
 from snowflake.snowpark.session import Session
 from snowflake.snowpark.functions import avg, sum, col,lit
+import string
 
 
 #set the page icon and titel - also use wide mode so the chart can strech out over the page 
@@ -34,13 +35,13 @@ st.markdown('<style>#vg-tooltip-element{z-index: 1000051}</style>',
 @st.cache
 def create_session_object():
     connection_parameters = {
-      "account": "<account name>",
-      "user": "<user name>",
-      "password": "<password>",
-      "role": "<role>",
-      "warehouse": "COMPUTE_WH",
-      "database": "SNOW_DB",
-      "schema": "SNOW_SCHEMA"
+      "account": string.sf_account,
+      "user": string.sf_user,
+      "password": string.sf_password,
+      "role": string.sf_role,
+      "warehouse": string.sf_warehouse,
+      "database": string.sf_database,
+      "schema": string.sf_schema
     }
 
     session = Session.builder.configs(connection_parameters).create()
@@ -119,7 +120,7 @@ def model_data(df):
     line_A = base.transform_filter(
         alt.datum.Measure == 'Current Sales:Q'
     ).encode(
-        alt.Y('Current Sales:Q',  scale=alt.Scale(domain=[500000, 4000000]), axis=alt.Axis(title='Total Sales by Day')),
+        alt.Y('Current Sales:Q',  scale=alt.Scale(domain=[750000, 3500000]), axis=alt.Axis(title='Total Sales by Day')),
         tooltip= [alt.Tooltip("invoice_date:T", title="Invoice Date"), 
                     alt.Tooltip("Current Sales:Q", title="Current Sales by Day")]
     )
@@ -128,7 +129,7 @@ def model_data(df):
     line_B = base.transform_filter(
         alt.datum.Measure == 'Forecast:Q'
     ).encode(
-        alt.Y('Forecast:Q', scale=alt.Scale(domain=[500000, 4000000]), axis=alt.Axis(title='Forcast')),
+        alt.Y('Forecast:Q', scale=alt.Scale(domain=[750000, 3500000]), axis=alt.Axis(title='Forcast')),
          tooltip= [alt.Tooltip("invoice_date:T", title="Invoice Date"),  
                    alt.Tooltip("Forecast:Q", title="Forecast")]
     )

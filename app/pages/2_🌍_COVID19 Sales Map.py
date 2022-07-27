@@ -5,6 +5,7 @@ import pydeck as pdk
 from urllib.error import URLError
 import numpy as np
 import snowflake.connector
+import string
 
 st.set_page_config(page_title="COVID Sales Map", page_icon="🌍", layout="wide")
 
@@ -27,13 +28,13 @@ with st.spinner('Generating Map'):
 
     ##snowflake connection info. Its not good practice to include passwords in your code. This is here for demo purposes
     ctx = snowflake.connector.connect(
-        user="<username>",
-        password='<password>', 
-        account="<account name>",
+        user=string.sf_user,
+        password=string.sf_password, 
+        account=string.sf_account,
         warehouse="COMPUTE_WH",
         database="SNOW_DB",
         schema="SNOW_SCHEMA",
-        role="<role>"
+        role=string.sf_role
     )
 
     #open the connection
