@@ -63,7 +63,7 @@ def create_session_object():
 def model_data(df):
 
     #use a streamlit slider to prdict 1-90 days worth of data. Default is 45 days 
-    predict_days = st.slider('Select Number of Days to Forcast. ', 1, 90, 45)
+    predict_days = st.slider('Select Number of Days to Forecast. ', 1, 90, 45)
     
     
     # ############
