@@ -11,14 +11,10 @@ import urllib.request
 import pandas as pd
 import string
 
-#from pandasgui import show
-#from pandasgui.datasets import titanic
-#gui = show(titanic)
-
 st.set_page_config(page_title="Customer Invoice Lookup", page_icon="📄") 
 
 
-st.header('Invoice Lookup')
+st.header('Customer Invoice Lookup')
 
 st.write(
 """
