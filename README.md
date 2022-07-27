@@ -8,7 +8,6 @@ Here are the high-level steps to get started:
   3. Run the streamlit app (`/app`) locally to showcase the power of Streamlit + Snowflakre 
           
           - modfify the Snowflake connection params in the `1_🏠Home.py` file
-
           - in terminal with Python and Streamlit installed: `streamlit run 1_🏠Home.py`
 
 
