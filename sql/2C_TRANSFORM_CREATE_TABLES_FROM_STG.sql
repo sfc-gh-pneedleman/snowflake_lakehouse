@@ -45,7 +45,7 @@ create or replace file format parquet_file_format
 -- Snowflake can infer the schema based on the data and the match column names on the copy into operation 
 
 --customer data is coming from our CRM's Parquet so we use the infer_schema command to generate the table. 
--- It has a unique ID that we can use 
+-- It has a unique ID that we can use  
 CREATE TABLE CUSTOMER USING TEMPLATE
 (select array_agg(object_construct(*))
   from table(
@@ -54,7 +54,7 @@ CREATE TABLE CUSTOMER USING TEMPLATE
       , file_format=>'parquet_file_format'
       )
     ));
---we can now load the data based on the matched column names 
+--we can now load the data based on the matched column names  
 COPY INTO CUSTOMER
  from @PARQUET_DATA_STAGE/customer_data
  file_format = 'parquet_file_format'

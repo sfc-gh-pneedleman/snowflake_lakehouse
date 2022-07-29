@@ -8,7 +8,7 @@ CREATE STAGE PARQUET_DATA_STAGE;
 CREATE STAGE PDF_FILE_STAGE
 directory = (enable = true )
 ENCRYPTION = (TYPE =  'SNOWFLAKE_SSE');
-/* Load data files into the newly created Snowflake stages */
+/* Load data files into the newly created Snowflake stages */ 
 --upload customer data. Not this command should be run via SnoqSQL 
 
 -- #### RUN the below command via SnowSQL to uplaod data to your Stage ####
@@ -23,6 +23,6 @@ ENCRYPTION = (TYPE =  'SNOWFLAKE_SSE');
 
 --since this is a directory stage used to support unstructured data, we must refresh the directory structure 
 ALTER STAGE PDF_FILE_STAGE REFRESH;
-/* lets review our objects and take a quick look at the stages */
+/* lets review our objects and take a quick look at the stages */ 
 LIST @PARQUET_DATA_STAGE;
 LIST @PDF_FILE_STAGE;
