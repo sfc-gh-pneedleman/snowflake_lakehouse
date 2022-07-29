@@ -48,14 +48,13 @@ def create_session_object():
     #################################################################################
     ## use snowpark to get sum of all invoices by date tp get total sales by date
     ##################################################################################
-    #invoice table
-    df_invoice = session.table('INVOICES').filter(col("INVOICE_DATE") <= '2022-07-18')
-    df_invoice = df_invoice.select(col("INVOICE_ID"), to_date(col("INVOICE_DATE")).cast("date").alias("INVOICE_DATE"))
-    #invoice lines table
+    #invoice table - select invoice_id and invoice_date 
+    df_invoice = session.table('INVOICES').select(col("INVOICE_ID"), to_date(col("INVOICE_DATE")).alias("INVOICE_DATE")).filter(col("INVOICE_DATE") <= '2022-07-18')
+    #invoice lines table - select invoice_id and item_price
     df_inv_lines = session.table('INVOICE_LINES').select(col("INVOICE_ID"), col("ITEM_PRICE"))
-    #join invoices and invoice lines 
+    #join invoices and invoice lines on invoice_id 
     df_inv_and_lines = df_invoice.join(df_inv_lines, df_inv_lines.col("INVOICE_ID") == df_invoice.col("INVOICE_ID"))
-    #perform aggrigration to date level
+    #perform aggrigration on item price to date level 
     df_inv_and_lines = df_inv_and_lines.group_by('INVOICE_DATE').agg(sum('ITEM_PRICE').cast("float").alias("ITEM_PRICE")).sort("INVOICE_DATE")
     
     #convert Snowflake DF to pandas Dataframe so we can use generic Pandas operations. This gets executed in Snowflake! 
