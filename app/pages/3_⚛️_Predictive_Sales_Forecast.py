@@ -8,7 +8,7 @@ from pandas.tseries.offsets import DateOffset
 import streamlit as st
 import altair as alt
 from snowflake.snowpark.session import Session
-from snowflake.snowpark.functions import avg, sum, col,lit
+from snowflake.snowpark.functions import avg, sum, col, to_date
 import string
 
 
@@ -25,7 +25,6 @@ st.markdown("###### You can use the slidebar to select how many days of data you
 #allows tooltips in the expanded view
 st.markdown('<style>#vg-tooltip-element{z-index: 1000051}</style>',
              unsafe_allow_html=True)
-
 
 
 ## ############
@@ -46,14 +45,21 @@ def create_session_object():
 
     session = Session.builder.configs(connection_parameters).create()
    
-    #SQL get sum of all invoices by data to get total sales by date
-    df = session.sql("SELECT TRUNC(INVOICE_DATE, 'day')::DATE as INVOICE_DATE, SUM(ITEM_PRICE)::number as ITEM_PRICE FROM INVOICES I, INVOICE_LINES IL \
-             WHERE I.INVOICE_ID = IL.INVOICE_ID    \
-             AND INVOICE_DATE <= '2022-07-18'      \
-             GROUP BY TRUNC(INVOICE_DATE, 'day')::DATE              \
-             ORDER BY 1;")
-    #convert Snowflake DF to pandas Dataframe so we can use generic Pandas operations 
-    return_df  = df.to_pandas()
+    #################################################################################
+    ## use snowpark to get sum of all invoices by date tp get total sales by date
+    ##################################################################################
+    #invoice table
+    df_invoice = session.table('INVOICES').filter(col("INVOICE_DATE") <= '2022-07-18')
+    df_invoice = df_invoice.select(col("INVOICE_ID"), to_date(col("INVOICE_DATE")).cast("date").alias("INVOICE_DATE"))
+    #invoice lines table
+    df_inv_lines = session.table('INVOICE_LINES').select(col("INVOICE_ID"), col("ITEM_PRICE"))
+    #join invoices and invoice lines 
+    df_inv_and_lines = df_invoice.join(df_inv_lines, df_inv_lines.col("INVOICE_ID") == df_invoice.col("INVOICE_ID"))
+    #perform aggrigration to date level
+    df_inv_and_lines = df_inv_and_lines.group_by('INVOICE_DATE').agg(sum('ITEM_PRICE').cast("float").alias("ITEM_PRICE")).sort("INVOICE_DATE")
+    
+    #convert Snowflake DF to pandas Dataframe so we can use generic Pandas operations. This gets executed in Snowflake! 
+    return_df= df_inv_and_lines.to_pandas()
 
     #set the index of the Dataframe to be the date column of invoice date
     return_df.set_index('INVOICE_DATE', inplace=True)
@@ -159,7 +165,5 @@ if __name__ == "__main__":
     with st.spinner('Running Model'):
         model_data(df_model)
     st.success('Model Generated')
-
-
 
 
