@@ -18,7 +18,7 @@ import string
 st.set_page_config(page_title="Customer Invoice Lookup", page_icon="📄") 
 
 
-st.header('Invoice Lookup')
+st.header('Customer Invoice Lookup')
 
 st.write(
 """
@@ -51,10 +51,10 @@ def get_data():
     # our directory table (stage). Once we have our stage we use the get_presigned_url() function to get the AWS URL to our file 
     # we also splice the first and last name and then concatinate its formatted Last, First. 
     sql_stmt = "SELECT c.CUSTOMER_ID,                                                                       \
-                    TRIM(SPLIT_PART(CUSTOMER_NAME, ' ', 1)) as FIRST_NAME ,                                 \
-                    TRIM(SPLIT_PART(CUSTOMER_NAME,' ', 2)      || ' '||                                     \
-                        SPLIT_PART(CUSTOMER_NAME, ' ',3)       || ' '||                                     \
-                        SPLIT_PART(CUSTOMER_NAME, ' ',4)) as LAST_NAME ,                                    \
+                    TRIM(SPLIT_PART(NAME, ' ', 1)) as FIRST_NAME ,                                 \
+                    TRIM(SPLIT_PART(NAME,' ', 2)      || ' '||                                     \
+                        SPLIT_PART(NAME, ' ',3)       || ' '||                                     \
+                        SPLIT_PART(NAME, ' ',4)) as LAST_NAME ,                                    \
                   LAST_NAME || ', ' || FIRST_NAME AS CUST_NAME,                                             \
                   INVOICE_NUMBER, I.SRC_FILE_NAME,                                                          \
                     get_presigned_url(@PDF_FILE_STAGE, relative_path) as FILE                               \
