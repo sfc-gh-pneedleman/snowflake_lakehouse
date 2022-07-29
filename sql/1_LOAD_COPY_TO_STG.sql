@@ -9,7 +9,7 @@ CREATE STAGE PDF_FILE_STAGE
 directory = (enable = true )
 ENCRYPTION = (TYPE =  'SNOWFLAKE_SSE');
 /* Load data files into the newly created Snowflake stages */ 
---upload customer data. Not this command should be run via SnoqSQL 
+--upload customer data. Note this command should be run via SnoqSQL 
 
 -- #### RUN the below command via SnowSQL to uplaod data to your Stage ####
 --put file://parquet/customer_data/* @parquet_data_stage/customer_data/;
