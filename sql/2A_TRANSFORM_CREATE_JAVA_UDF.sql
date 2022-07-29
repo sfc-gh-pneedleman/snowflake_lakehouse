@@ -1,7 +1,7 @@
 --create stage to store the jar file 
 CREATE STAGE jars_stage;
 -- #### RUN the below command via SnowSQL to uplaod data to your Stage ####
---put file://pdfbox-app-2.0.25.jar @jars_stage  AUTO_COMPRESS=false;
+--put file://pdfbox_jar/pdfbox-app-2.0.25.jar @jars_stage  AUTO_COMPRESS=false;
 --#####
 
 --PDF function which takes in a PDF file and returns extracted text
@@ -39,19 +39,3 @@ return null;
 }
 $$;
 
--- #####################################
--- ## Process the files with our UDF
--- ###################################
-
---this process is quite memory intensive. Lets use the power of Snowflake to instantly scale to process all the PDFs
-ALTER WAREHOUSE COMPUTE_WH SET WAREHOUSE_SIZE = '2X-Large';
---save all the PDF data along with the file name into a new table in its text format 
-CREATE TRANSIENT TABLE PDF_RAW_TEXT AS 
-(select RELATIVE_PATH, process_pdf(file_url) as Pdf_text
-from (
-    select file_url,RELATIVE_PATH
-    from directory(@pdf_file_stage)
-    group by file_url, RELATIVE_PATH
-)) ;
---scale the compute back down once complete
-ALTER WAREHOUSE COMPUTE_WH SET WAREHOUSE_SIZE = 'X-Small';

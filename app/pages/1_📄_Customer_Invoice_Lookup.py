@@ -11,10 +11,14 @@ import urllib.request
 import pandas as pd
 import string
 
+#from pandasgui import show
+#from pandasgui.datasets import titanic
+#gui = show(titanic)
+
 st.set_page_config(page_title="Customer Invoice Lookup", page_icon="📄") 
 
 
-st.header('Customer Invoice Lookup')
+st.header('Invoice Lookup')
 
 st.write(
 """
@@ -45,10 +49,17 @@ def get_data():
     ##this SQL statement is where the magic happens for retrieving files. 
     # We can easily get the customer and invoice info but we also have the unique file name that can be used to join to 
     # our directory table (stage). Once we have our stage we use the get_presigned_url() function to get the AWS URL to our file 
-    sql_stmt = "SELECT c.CUSTOMER_ID, CUSTOMER_LAST_NAME || ', ' || CUSTOMER_FIRST_NAME as CUST_NAME,  INVOICE_NUMBER, I.SRC_FILE_NAME,   \
-                    get_presigned_url(@PDF_FILE_STAGE, relative_path) as FILE                                                             \
-                FROM CUSTOMER C, INVOICES I, DIRECTORY(@PDF_FILE_STAGE) PDF_STG                                                           \
-                WHERE c.customer_id = I.CUSTOMER_ID                                                                                       \
+    # we also splice the first and last name and then concatinate its formatted Last, First. 
+    sql_stmt = "SELECT c.CUSTOMER_ID,                                                                       \
+                    TRIM(SPLIT_PART(CUSTOMER_NAME, ' ', 1)) as FIRST_NAME ,                                 \
+                    TRIM(SPLIT_PART(CUSTOMER_NAME,' ', 2)      || ' '||                                     \
+                        SPLIT_PART(CUSTOMER_NAME, ' ',3)       || ' '||                                     \
+                        SPLIT_PART(CUSTOMER_NAME, ' ',4)) as LAST_NAME ,                                    \
+                  LAST_NAME || ', ' || FIRST_NAME AS CUST_NAME,                                             \
+                  INVOICE_NUMBER, I.SRC_FILE_NAME,                                                          \
+                    get_presigned_url(@PDF_FILE_STAGE, relative_path) as FILE                               \
+                FROM CUSTOMER C, INVOICES I, DIRECTORY(@PDF_FILE_STAGE) PDF_STG                             \
+                WHERE c.customer_id = I.CUSTOMER_ID                                                         \
                 AND I.SRC_FILE_NAME = PDF_STG.RELATIVE_PATH (+);"                                                                                             
 
     #execute the SQL and store results in a pandas dataframe
