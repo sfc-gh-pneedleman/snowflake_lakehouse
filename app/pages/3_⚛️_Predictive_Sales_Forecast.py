@@ -46,7 +46,7 @@ def create_session_object():
     session = Session.builder.configs(connection_parameters).create()
    
     #################################################################################
-    ## use snowpark to get sum of all invoices by date tp get total sales by date
+    ## use snowpark to get sum of all invoices by date tp get total sales by date 
     ##################################################################################
     #invoice table - select invoice_id and invoice_date 
     df_invoice = session.table('INVOICES').select(col("INVOICE_ID"), to_date(col("INVOICE_DATE")).alias("INVOICE_DATE")).filter(col("INVOICE_DATE") <= '2022-07-18')
