@@ -4,7 +4,7 @@ CREATE OR REPLACE VIEW VW_PDF_RAW_TEXT AS
 LPAD(SPLIT_PART(SPLIT_PART(PDF_TEXT, 'Customer:', 2), ' ', 2), 10, 0) as CUSTOMER_ID,
 SPLIT_PART(SPLIT_PART(PDF_TEXT, 'Invoice:', 2), ' ', 2) as INVOICE_NUM,
 SPLIT_PART(SPLIT_PART(PDF_TEXT, 'Generated On:', 2), ' ', 2) as INV_GEN_DT,
-TRIM(SPLIT_PART(SPLIT_PART(PDF_TEXT, 'Status:', 2), 'Payment', 1)) as INV_STATUS,
+TRIM(REPLACE(SPLIT_PART(SPLIT_PART(PDF_TEXT, 'Status:', 2), 'Payment', 1), '\n', ' ')) as INV_STATUS,
 SPLIT_PART(SPLIT_PART(PDF_TEXT, 'Payment Date:', 2), ' ', 2) as PAYMENT_DT,
 TO_NUMBER(SPLIT_PART(SPLIT_PART(PDF_TEXT, 'Item 1', 2), ' ', 2), '$999,999.99', 38, 2) as ITEM_1,
 TO_NUMBER(SPLIT_PART(SPLIT_PART(PDF_TEXT, 'Item 2', 2), ' ', 2), '$999,999.99', 38, 2) as ITEM_2,
@@ -42,10 +42,10 @@ create or replace file format parquet_file_format
 
 
 -- We are using schema evolution to automatically generate the table def and then load the data without specifying the columns. 
--- Snowflake can infer the schema based on the data and the match column names on the copy into operation 
+-- Snowflake can infer the schema based on the data and the match column names on the copy into operation  
 
 --customer data is coming from our CRM's Parquet so we use the infer_schema command to generate the table. 
--- It has a unique ID that we can use  
+-- It has a unique ID that we can use 
 CREATE TABLE CUSTOMER USING TEMPLATE
 (select array_agg(object_construct(*))
   from table(
@@ -54,7 +54,7 @@ CREATE TABLE CUSTOMER USING TEMPLATE
       , file_format=>'parquet_file_format'
       )
     ));
---we can now load the data based on the matched column names  
+--we can now load the data based on the matched column names 
 COPY INTO CUSTOMER
  from @PARQUET_DATA_STAGE/customer_data
  file_format = 'parquet_file_format'
