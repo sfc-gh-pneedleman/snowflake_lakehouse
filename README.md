@@ -10,3 +10,4 @@ Here are the high-level steps to get started:
       * In terminal with Python and Streamlit installed: `streamlit run 1_🏠Home.py`
 
 
+The post that accompanies this post can be found here: https://medium.com/snowflake/the-snowflake-lakehouse-b583746d686b
