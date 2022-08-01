@@ -96,8 +96,6 @@ def get_pdf_url(df):
     #and with the invoice name we can get the URL and store it in a variable. Remember the FILE value comes from the Snowflake SQL 
     file_url = row['FILE'].values[0]
 
-    st.write(file_url)
-
     return file_url
 
 #function to display the PDF of a given file 
@@ -105,6 +103,8 @@ def displayPDF(file):
     # Opening file from file path. this is used to open the file from a website rather than local
     with urllib.request.urlopen(file) as f:
         base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+
+        st.write(base64_pdf)
     
     # Embedding PDF in HTML
     pdf_display = F'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="950" type="application/pdf"></iframe>'
