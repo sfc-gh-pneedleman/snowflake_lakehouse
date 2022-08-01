@@ -96,6 +96,8 @@ def get_pdf_url(df):
     #and with the invoice name we can get the URL and store it in a variable. Remember the FILE value comes from the Snowflake SQL 
     file_url = row['FILE'].values[0]
 
+    st.write(file_url)
+
     return file_url
 
 #function to display the PDF of a given file 
