@@ -28,7 +28,7 @@ sf_password_in = st.sidebar.text_input("Password", type='password')
 sf_account_in = st.sidebar.text_input("Account Name", help="This can be in the form of <org-account> or <account_locator.region>. More info: https://docs.snowflake.com/en/user-guide/admin-account-identifier.html")
 sf_role_in = st.sidebar.text_input("Role",  value="SYSADMIN")
 sf_wh_in = st.sidebar.text_input("Warehouse",  value="COMPUTE_WH")
-sf_db_in = st.sidebar.text_input("Database", value="SNOW_DB"), 
+sf_db_in = st.sidebar.text_input("Database", value="SNOW_DB")
 sf_schema_in = st.sidebar.text_input("Schema",  value="SNOW_SCHEMA")
 # Every form must have a submit button.
 submitted = st.sidebar.button("Test Connection")
