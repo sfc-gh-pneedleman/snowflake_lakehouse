@@ -29,7 +29,7 @@ through a [directory table](https://docs.snowflake.com/en/user-guide/data-load-d
 
 ##using caching to speed up the refresh of going back to get the list of values for each selection. There could be an issue with Presigned URLs timing out. 
 #If you see 401 errors disable the cache
-@st.cache(persist=False)
+#@st.cache(persist=False)
 def get_data():
 
     ##snowflake connection info. Its not good practice to include passwords in your code. This is here for demo purposes
