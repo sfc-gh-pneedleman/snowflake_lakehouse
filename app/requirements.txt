@@ -2,3 +2,5 @@
 snowflake-connector-python
 statsmodels
 snowflake-snowpark-python
+base64
+urllib
