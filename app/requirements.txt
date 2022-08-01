@@ -3,4 +3,3 @@ snowflake-connector-python
 statsmodels
 snowflake-snowpark-python
 pybase64
-urllib3
