@@ -31,9 +31,9 @@ with st.spinner('Generating Map'):
         user=string.sf_user,
         password=string.sf_password, 
         account=string.sf_account,
-        warehouse="COMPUTE_WH",
-        database="SNOW_DB",
-        schema="SNOW_SCHEMA",
+        warehouse=string.sf_warehouse,
+        database=string.sf_database,
+        schema=string.sf_schema,
         role=string.sf_role
     )
 
