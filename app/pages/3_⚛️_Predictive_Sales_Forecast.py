@@ -98,6 +98,30 @@ def model_data(df):
 
     future_df['Current Sales'] = future_df['ITEM_PRICE']
 
+    ############# ALTERNATIVE TO ABOVE MODEL -- USE SNOWFLAKE ML FUNCTIONS 
+    #### more info: https://docs.snowflake.com/en/user-guide/ml-powered-forecasting
+    #--create a view to combine the invoice and invoice line data to obtain price by date 
+    # CREATE OR REPLACE VIEW INVOICE_DATA AS
+    # SELECT SUM(ITEM_PRICE) TOTAL_PRICE, TO_DATE(INVOICE_DATE)::TIMESTAMP INVOICE_DATE
+    # FROM INVOICES I , INVOICE_LINES IL
+    # WHERE I.INVOICE_ID = IL.INVOICE_ID
+    # GROUP BY TO_DATE(INVOICE_DATE)::TIMESTAMP
+    # ORDER BY INVOICE_DATE;
+    
+    # --create a new model with the data listed in the view. The two columns we needs
+    # --are the invoice date for timestamp col and price for the target col
+    # CREATE SNOWFLAKE.ML.FORECAST SAMPLE_MODEL(
+    #   INPUT_DATA => SYSTEM$REFERENCE('VIEW', 'INVOICE_DATA'),
+    #   TIMESTAMP_COLNAME => 'INVOICE_DATE',
+    #   TARGET_COLNAME => 'TOTAL_PRICE'
+    # );
+    #
+    #
+    # --call the sample model with the period. I selected 40 but this can be changed 
+    # --based on the number of days you would like to forcast for. 
+    # call SAMPLE_MODEL!FORECAST(FORECASTING_PERIODS => 40);
+    ####################################################################################
+
     # ######################
     # Plot the Results using StreamLit AltAir     
     # #######################
